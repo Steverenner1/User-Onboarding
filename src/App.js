@@ -1,5 +1,5 @@
 import React from 'react';
-import logo from './logo.svg';
+import ReactDOM from 'reac-dom';
 import './App.css';
 import Form from "./Components/Form";
 
@@ -12,4 +12,6 @@ function App() {
   );
 }
 
+const rootElement = document.getElementById('root');
+ReactDOM.render(<App />, rootElement);
 export default App;

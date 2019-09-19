@@ -1,9 +1,16 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import {withFormik, Form, Field} from "formik";
 import * as Yup from "yup";
 import axios from "axios";
 
 const userForm = ({values, errors, touched, status}) => {
+    const [users, setUsers] = useState([])
+    useEffect(() => {
+        if (status) {
+            setUsers([...users, status]);
+        }
+    }, [status])
+    
     return(
         <div className="user-form">
             <Form>
@@ -48,9 +55,10 @@ const FormikUserForm = withFormik({
         };
     },
     validationSchema: Yup.object().shape({
-        name: Yup.string().required("Please enter a valid name"),
-        email: Yup.string().required("Please enter a valid email"),
-        password: Yup.string().required("Please enter a valid password")
+        name: Yup.string().required("Please enter a valid name").length(5|"Must be exactly 5 characters"),
+        // name: Yup.string().length(5 | "Must be exactly 5 characters"),
+        email: Yup.string().required("Please enter a valid email").max(10|"Email can't be more than 10 characters"),
+        password: Yup.string().required("Please enter a valid password").min(8|"Password must be at least 8 characters")
     }),
     handleSubmit(values, {setStatus}) {
         axios
