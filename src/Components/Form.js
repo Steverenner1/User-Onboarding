@@ -1,14 +1,12 @@
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import {withFormik, Form, Field} from "formik";
 import * as Yup from "yup";
 import axios from "axios";
 
-const userForm = ({values, errors, touched, status}) => {
+const UserForm = ({values, errors, touched, status}) => {
     const [users, setUsers] = useState([])
     useEffect(() => {
-        if (status) {
-            setUsers([...users, status]);
-        }
+        status && setUsers(users => [...users, status]);
     }, [status])
     
     return(
@@ -25,13 +23,13 @@ const userForm = ({values, errors, touched, status}) => {
                     name="email"
                     placeholder="Email"
                 />
-                {touched.email && errors.email && (<p classname="error">{errors.email}</p>)}
+                {touched.email && errors.email && (<p className="error">{errors.email}</p>)}
                 <Field
-                    type="text"
+                    type="password"
                     name="password"
                     placeholder="Password"
                 />
-                {touched.password && errors.password && (<p classname="error">{errors.password}</p>)}
+                {touched.password && errors.password && (<p className="error">{errors.password}</p>)}
                 <label className = "checkbox-container">
                     <Field type = "checkbox"
                         name="terms"
@@ -40,6 +38,13 @@ const userForm = ({values, errors, touched, status}) => {
                 </label>
                 <button>Submit</button>
             </Form>
+            {users.map(user => (
+                <ul key={user.id}>
+                    <li>Name:{user.name}</li>
+                    <li>Email:{user.email}</li>
+                    <li>Password:{user.password}</li>
+                </ul>
+            ))}
 
         </div>
 
@@ -68,6 +73,6 @@ const FormikUserForm = withFormik({
         })
         .catch(error => console.log(error.response));
     }
-})(userForm)
+})(UserForm)
 console.log("This is the HOC", FormikUserForm);
 export default FormikUserForm;
